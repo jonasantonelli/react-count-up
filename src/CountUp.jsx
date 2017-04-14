@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Cookie from 'js-cookie';
 
 class CountUp extends React.Component {
@@ -6,7 +7,10 @@ class CountUp extends React.Component {
     constructor(props){
         super(props);
 
-        const cookie = Math.abs(Cookie.get(this.props.cookieName));
+        let cookie = 0;
+        if(this.props.persistent) {
+            cookie = Math.abs(Cookie.get(this.props.cookieName));
+        }
         const currentValue = cookie > this.props.value ? cookie : this.props.value;
 
         this.state = {
@@ -21,7 +25,10 @@ class CountUp extends React.Component {
         this.animate = this.animate.bind(this);
         this.updateNumbers = this.updateNumbers.bind(this);
 
-        window.onbeforeunload = this.unload.bind(this);
+        if(this.props.persistent) {
+            console.log('persistent');
+            window.onbeforeunload = this.unload.bind(this);
+        }
     }
 
     componentDidMount() {
@@ -29,13 +36,14 @@ class CountUp extends React.Component {
     }
 
     unload() {
+        console.log('aqui');
         Cookie.set(this.props.cookieName, this.state.value);
     }
 
     loop(){
         clearInterval(this.timeoutID);
         const interval = parseInt(this.props.interval) || 1,
-              rand = Math.round(Math.random() * (10000 - 500)) + 500;
+              rand = Math.round(Math.random() * (1000 - 500)) + 500;
 
         this.timeoutID = setTimeout(() => {
             this.animate();
@@ -85,7 +93,8 @@ CountUp.propTypes = {
     incrementMin: PropTypes.number,
     incrementMax: PropTypes.number,
     cookieName: PropTypes.string,
-    localeString: PropTypes.string
+    localeString: PropTypes.string,
+    persistent: PropTypes.bool
 };
 
 CountUp.defaultProps = {
@@ -95,7 +104,8 @@ CountUp.defaultProps = {
     incrementMin: 1,
     incrementMax: 10,
     cookieName: 'react-count-up',
-    localeString: 'pt-BR'
+    localeString: 'pt-BR',
+    persistent: false
 };
 
 export default CountUp;
