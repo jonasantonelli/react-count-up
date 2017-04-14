@@ -2,7 +2,7 @@
   "name": "react-count-up",
   "version": "1.0.0",
   "description": "React Component to simulate realtime count up",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack -p"
@@ -17,7 +17,7 @@
     "count-up"
   ],
   "author": "Jonas Antonelli",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jonasantonelli/react-count-up/issues"
   },
